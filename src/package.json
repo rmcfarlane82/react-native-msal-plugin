@@ -1,0 +1,30 @@
+{
+  "name": "react-native-msal-plugin",
+  "version": "1.0.0",
+  "description": "React Native Plugin that wraps Microsoft MSAL library allowing you to authenticate with azure B2C",
+  "main": "./index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react-native",
+    "Microsoft MSAL",
+    "MSAL",
+    "Authentication",
+    "ios",
+    "android",
+    "droid",
+    "B2C",
+    "Azure"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rmcfarlane82/react-native-msal-plugin.git"
+  },
+  "author": "Rory McFarlane",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rmcfarlane82/react-native-msal-plugin/issues"
+  },
+  "homepage": "https://github.com/rmcfarlane82/react-native-msal-plugin#readme"
+}
