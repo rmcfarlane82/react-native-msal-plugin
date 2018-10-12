@@ -68,6 +68,28 @@ Make sure to replace [REPLACE_WITH_YOUR_APPLICATION_ID] with your own applicatio
 
 ```
 
+Handle the redirection of the browser, Open the AppDelegate.m file and import msal.h
+
+``` objc
+
+#import <MSAL/MSAL.h>
+
+```
+
+Then add this method
+
+``` objc
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options
+  {
+    
+    [MSALPublicClientApplication handleMSALResponse:url];
+    return YES;
+  }
+
+@end
+```
+
 ## Android Setup
 
 Add Browser tab activity to your AndroidManifest.xml make sure to replace [REPLACE_WITH_YOUR_APPLICATION_ID] with your own application id
