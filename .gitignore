@@ -373,3 +373,6 @@ __pycache__/
 # End of https://www.gitignore.io/api/visualstudio
 example/.vscode/.react/index.map
 example/.vscode/.react/index.bundle
+
+#src folder
+msalPlugin/src/

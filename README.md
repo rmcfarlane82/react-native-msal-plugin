@@ -7,6 +7,10 @@ Tested  on [React Native](https://facebook.github.io/react-native/) 0.57.1
 
 Based on [bjartebore repo](https://github.com/bjartebore/react-native-msal-client)
 
+[![npm version](https://badge.fury.io/js/react-native-msal-plugin.svg)](https://badge.fury.io/js/react-native-msal-plugin)
+
+[![Build status](https://dev.azure.com/dogbytes/react-native-msal-plugin/_apis/build/status/react-native-msal-plugin-CI)](https://dev.azure.com/dogbytes/react-native-msal-plugin/_apis/build/status/react-native-msal-plugin-CI)
+
 ``` sh
 npm install react-native-msal-plugin
 ```
