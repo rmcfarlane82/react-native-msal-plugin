@@ -1,9 +1,10 @@
 # react-native-msal-plugin
 
+[ChangeLog](docs/changelog.md)
+
 Wrapper around [microsoft-authentication-library-for-objc](https://github.com/AzureAD/microsoft-authentication-library-for-objc) library and [microsoft-authentication-library-for-android](https://github.com/AzureAD/microsoft-authentication-library-for-android)
 
-
-Tested  on [React Native](https://facebook.github.io/react-native/) 0.57.1
+Tested on [React Native](https://facebook.github.io/react-native/) 0.57.1
 
 Based on [bjartebore repo](https://github.com/bjartebore/react-native-msal-client)
 
@@ -11,23 +12,27 @@ Based on [bjartebore repo](https://github.com/bjartebore/react-native-msal-clien
 
 [![Build status](https://dev.azure.com/dogbytes/react-native-msal-plugin/_apis/build/status/react-native-msal-plugin-CI)](https://dev.azure.com/dogbytes/react-native-msal-plugin/_apis/build/status/react-native-msal-plugin-CI)
 
-``` sh
+```sh
 npm install react-native-msal-plugin
 ```
+
 or
-``` sh
+
+```sh
 yarn add react-native-msal-plugin
 ```
 
 Link the library
-``` sh
+
+```sh
 react-native link react-native-msal-plugin
 ```
 
 ## IOS Setup
+
 ### Requirements
 
-  * [Cocoapods](https://cocoapods.org/)
+- [Cocoapods](https://cocoapods.org/)
 
 ### Install the required Pod
 
@@ -35,26 +40,27 @@ Install [microsoft-authentication-library-for-objc](https://github.com/AzureAD/m
 
 Create a Podfile in the ios project and add the following
 
-``` ruby
+```ruby
 
 platform :ios, '9.3'
 
 target 'msalExample' do
-  
+
   # Pods for msalExample
-  pod 'MSAL', :git => 'https://github.com/AzureAD/microsoft-authentication-library-for-objc.git', :tag => '0.1.3'
+  pod 'MSAL', '~> 0.2'
 end
 
 ```
 
-Open Terminal in the same directory as the Podfile and run ```pod install```
+Open Terminal in the same directory as the Podfile and run `pod install`
 
 ### Add Url Scheme
-Open the info.plist and add a url scheme that contains the callback url. 
+
+Open the info.plist and add a url scheme that contains the callback url.
 
 Make sure to replace [REPLACE_WITH_YOUR_APPLICATION_ID] with your own application id
 
-``` xml
+```xml
 
 <key>CFBundleURLTypes</key>
 <array>
@@ -74,7 +80,7 @@ Make sure to replace [REPLACE_WITH_YOUR_APPLICATION_ID] with your own applicatio
 
 Handle the redirection of the browser, Open the AppDelegate.m file and import msal.h
 
-``` objc
+```objc
 
 #import <MSAL/MSAL.h>
 
@@ -82,11 +88,11 @@ Handle the redirection of the browser, Open the AppDelegate.m file and import ms
 
 Then add this method
 
-``` objc
+```objc
 
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options
   {
-    
+
     [MSALPublicClientApplication handleMSALResponse:url];
     return YES;
   }
@@ -98,7 +104,7 @@ Then add this method
 
 Add Browser tab activity to your AndroidManifest.xml make sure to replace [REPLACE_WITH_YOUR_APPLICATION_ID] with your own application id
 
-``` xml
+```xml
  <activity
     android:name=".MainActivity"
     android:label="@string/app_name"
@@ -129,45 +135,119 @@ Add Browser tab activity to your AndroidManifest.xml make sure to replace [REPLA
 ### Common endpoint
 
 ```js
-import MsalPlugin from 'react-native-msal-plugin';
+import MsalPlugin from "react-native-msal-plugin";
 
-const authority = 'https://login.microsoftonline.com/common';
-const clientId='ad04905f-6060-4bb0-9372-958afdb68574';
-const scopes = ['User.Read'];
+const authority = "https://login.microsoftonline.com/common";
 
-const authClient = MsalPlugin(authority, clientId);
+const clientId = "ad04905f-6060-4bb0-9372-958afdb68574";
 
-authClient.acquireTokenAsync(scopes)
-  .then((data)=> {
-    console.log(result);
-  }).catch((error) => {
-    console.log(error);
-  });
+const scopes = ["User.Read"];
+
+const extraQueryParameters = {
+  exampleParamOne: "exampleParamOneValue",
+  exampleParamTwo: "exampleParamTwoValue"
+};
+
+const login_hint = "user@domain.com";
+
+const authClient = new MsalPlugin(authority, clientId);
+
+const forceTokenRefresh = false;
+
+let tokenResult = {};
+
+// acquire token
+try {
+  tokenResult = await this.authClient.acquireTokenAsync(
+    scopes,
+    extraQueryParameters,
+    login_hint,
+    MsalUIBehavior.SELECT_ACCOUNT
+  );
+  console.log("Store the token", tokenResult);
+} catch (error) {
+  console.log(error);
+}
+
+// acquire token silent
+try {
+  const silentTokenresult = await this.authClient.acquireTokenSilentAsync(
+    scopes,
+    tokenResult.userInfo.userIdentifier,
+    forceTokenRefresh
+  );
+  console.log("Store the new token", silentTokenresult);
+} catch (error) {
+  console.log(error);
+}
+
+// sign out
+try {
+  await this.authClient.tokenCacheDelete();
+} catch (error) {
+  console.log(error);
+}
 ```
 
 ### Azure B2C endpoint
 
 ```js
-
 import MsalPlugin from "react-native-msal-plugin";
 
 const authority = "https://{domain}.b2clogin.com/tfp/{domain}.onmicrosoft.com";
+
 const applicationId = "{applicationId}";
+
 const policies = {
   signUpSignInPolicy: "B2C_1_signup-signin-policy",
   passwordResetPolicy: "B2C_1_Password-reset-policy"
 };
-const scopes = [
-  "https://{domain}.onmicrosoft.com/{app id}/user_impersonation"
-];
 
-const authClient = new MsalPlugin(authority, applicationId);
+const scopes = ["https://{domain}.onmicrosoft.com/{app id}/user_impersonation"];
 
-authClient.aquireTokenB2CAsync(scopes, policies)
-.then(result => {
-  console.log(result);
-}).catch(error => {
+const extraQueryParameters = {
+  exampleParamOne: "exampleParamOneValue",
+  exampleParamTwo: "exampleParamTwoValue"
+};
+
+const login_hint = "user@domain.com";
+
+const authClient = new MsalPlugin(authority, applicationId, policies);
+
+const forceTokenRefresh = false;
+
+let tokenResult = {};
+
+// acquire Token
+try {
+  tokenResult = await this.msalPlugin.acquireTokenAsync(
+    scopes,
+    extraQueryParameters,
+    login_hint,
+    MsalUIBehavior.SELECT_ACCOUNT
+  );
+  console.log("Store the token", tokenResult);
+} catch (error) {
   console.log(error);
-});
+}
 
+// acquire Token Silent
+try {
+  const silentTokenresult = await this.msalPlugin.acquireTokenSilentAsync(
+    scopes,
+    tokenResult.userInfo.userIdentifier,
+    forceTokenRefresh
+  );
+
+  console.log("Store the new token", silentTokenresult);
+} catch (error) {
+  console.log(error);
+}
+
+// sign out
+try {
+  await this.authClient.tokenCacheDelete();
+} catch (error) {
+  console.log(error);
+}
 ```

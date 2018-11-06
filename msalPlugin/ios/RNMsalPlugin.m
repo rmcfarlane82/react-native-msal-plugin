@@ -5,79 +5,86 @@
 
 @implementation RNMsalPlugin
 
+
 RCT_EXPORT_MODULE();
 
-static NSMutableDictionary* existingApplications = nil;
-
-
 RCT_REMAP_METHOD(acquireTokenAsync,
-                 authority:(NSString *)authority
-                 clientId:(NSString *)clientId
-                 scopes:(NSArray<NSString*>*)scopes
-                 extraQueryParms:(NSString*)extraQueryParms
-                 resolver:(RCTPromiseResolveBlock)resolve
-                 rejecter:(RCTPromiseRejectBlock)reject )
+                  authority:(NSString *)authority
+                  clientId:(NSString *)clientId
+                  scopes:(NSArray<NSString*>*)scopes
+                  extraQueryParams:(NSDictionary*)extraQueryParams
+                  loginHint:(NSString*)loginHint
+                  msalUIBehavior:(NSString*)msalUIBehavior
+                  extraScopesToConsent:(NSArray<NSString*>*)extraScopesToConsent
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
 {
   @try {
-    
     NSError* error = nil;
-    MSALPublicClientApplication* clientApplication = [RNMsalPlugin getOrCreateClientApplication:authority withClientId:clientId error:&error];
     
+    MSALPublicClientApplication* clientApplication = [[MSALPublicClientApplication alloc] initWithClientId:clientId
+                                                                                                 authority:authority
+                                                                                                     error:&error];
     if (error) {
       @throw(error);
     }
     
-    
-    NSDictionary<NSString*,NSString*> *json = nil;
-    if(extraQueryParms != nil){
-      NSData *data = [extraQueryParms dataUsingEncoding:NSUTF8StringEncoding];
-      json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    if ([authority rangeOfString:@"login.microsoftonline.com" options:NSCaseInsensitiveSearch].location == NSNotFound) {
+          clientApplication.validateAuthority = false;
     }
+
+    NSDictionary<NSString*, NSNumber*>* behaviorDictionary = @{@"FORCE_LOGIN": @(MSALForceLogin),
+                                          @"SELECT_ACCOUNT": @(MSALSelectAccount),
+                                          @"CONSENT": @(MSALForceConsent)};
     
+    MSALUIBehavior behavior = behaviorDictionary[msalUIBehavior].integerValue;
     
     [clientApplication acquireTokenForScopes:scopes
-                        extraScopesToConsent:nil
-                                        user:nil
-                                  uiBehavior:MSALUIBehaviorDefault
-                        extraQueryParameters:json
+                        extraScopesToConsent:extraScopesToConsent
+                                   loginHint:loginHint
+                                  uiBehavior:behavior
+                        extraQueryParameters:extraQueryParams
                                    authority:authority
-                               correlationId:nil
-                             completionBlock:^(MSALResult *result, NSError *error)
-     {
-       if(error) {
-         reject([[NSString alloc] initWithFormat:@"%d", (int)error.code], error.description, error);
-       } else {
-         resolve([self MSALResultToDictionary:result authority:authority]);
-       }
-       
-     }];
+                               correlationId:[NSUUID new]
+                             completionBlock:^(MSALResult *result, NSError *error) {
+                               if(error) {
+                                 reject([[NSString alloc] initWithFormat:@"%d", (int)error.code], error.description, error);
+                               } else {
+                                 resolve([self MSALResultToDictionary:result authority:authority]);
+                               }
+                             }];
   }
   @catch (NSError* error)
   {
     reject([[NSString alloc] initWithFormat:@"%d", (int)error.code], error.description, error);
   }
-  
 }
-
+                   
 RCT_REMAP_METHOD(acquireTokenSilentAsync,
-                 authority:(NSString *)authority
-                 clientId:(NSString *)clientId
-                 scopes:(NSArray<NSString*>*)scopes
-                 userIdentitfier:(NSString*)userIdentifier
-                 resolver:(RCTPromiseResolveBlock)resolve
-                 rejecter:(RCTPromiseRejectBlock)reject)
+                  authority:(NSString *)authority
+                  clientId:(NSString *)clientId
+                  scopes:(NSArray<NSString*>*)scopes
+                  homeAccountIdentifier:(NSString*)homeAccountIdentifier
+                  forceRefresh:(BOOL)forceRefresh
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
 {
   @try {
     NSError* error = nil;
-    MSALPublicClientApplication* clientApplication = [RNMsalPlugin getOrCreateClientApplication:authority
-                                                                                   withClientId:clientId
-                                                                                          error:&error];
     
+    MSALPublicClientApplication* clientApplication = [[MSALPublicClientApplication alloc] initWithClientId:clientId
+                                                                                                 authority:authority
+                                                                                                     error:&error];
     if (error) {
       @throw(error);
     }
     
-    MSALUser* user = [clientApplication userForIdentifier:userIdentifier error:&error];
+    if ([authority rangeOfString:@"login.microsoftonline.com" options:NSCaseInsensitiveSearch].location == NSNotFound) {
+          clientApplication.validateAuthority = false;
+    }
+
+    MSALUser* user = [clientApplication userForIdentifier:homeAccountIdentifier
+                    error:&error];
     
     if (error) {
       @throw(error);
@@ -86,6 +93,8 @@ RCT_REMAP_METHOD(acquireTokenSilentAsync,
     [clientApplication acquireTokenSilentForScopes:scopes
                                               user:user
                                          authority:authority
+                                      forceRefresh:forceRefresh
+                                     correlationId:nil
                                    completionBlock:^(MSALResult *result, NSError *error) {
                                      if(error) {
                                        reject([[NSString alloc] initWithFormat:@"%d", (int)error.code], error.description, error);
@@ -94,7 +103,6 @@ RCT_REMAP_METHOD(acquireTokenSilentAsync,
                                                                   authority:authority]);
                                      }
                                    }];
-    
   }
   @catch(NSError* error)
   {
@@ -102,31 +110,29 @@ RCT_REMAP_METHOD(acquireTokenSilentAsync,
   }
 }
 
-RCT_REMAP_METHOD(tokenCacheDeleteItem,
-                 authority:(NSString *)authority
+RCT_REMAP_METHOD(tokenCacheDelete,
                  clientId:(NSString *)clientId
-                 userIdentitfier:(NSString*)userIdentifier
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
   @try
   {
     NSError* error = nil;
-    MSALPublicClientApplication* clientApplication = [RNMsalPlugin getOrCreateClientApplication:authority
-                                                                                   withClientId:clientId
-                                                                                        error:&error];
+    MSALPublicClientApplication* clientApplication = [[MSALPublicClientApplication alloc] initWithClientId:clientId
+                                                                                                     error:&error];
+    if (error) {
+      @throw error;
+    }
+    
+    NSArray<MSALUser*>* users = [clientApplication users:&error];
     
     if (error) {
       @throw error;
     }
     
-    MSALUser* user = [clientApplication userForIdentifier:userIdentifier error:&error];
-    
-    if (error) {
-      @throw error;
+    for (MSALUser *user in users) {
+      [clientApplication removeUser:user error:&error];
     }
-    
-    [clientApplication removeUser:user error:&error];
     
     if (error) {
       @throw error;
@@ -149,12 +155,7 @@ RCT_REMAP_METHOD(tokenCacheDeleteItem,
   [dict setObject:(result.idToken ?: [NSNull null]) forKey:@"idToken"];
   [dict setObject:(result.uniqueId) ?: [NSNull null] forKey:@"uniqueId"];
   [dict setObject:(authority) ?: [NSNull null] forKey:@"authority"];
-  
-  if (result.expiresOn)
-  {
-    [dict setObject:[NSNumber numberWithDouble:[result.expiresOn timeIntervalSince1970] * 1000] forKey:@"expiresOn"];
-  }
-  
+  [dict setObject:[NSNumber numberWithDouble:[result.expiresOn timeIntervalSince1970] * 1000] forKey:@"expiresOn"];
   [dict setObject:[self MSALUserToDictionary:result.user forTenant:result.tenantId] forKey:@"userInfo"];
   return [dict mutableCopy];
 }
@@ -163,42 +164,13 @@ RCT_REMAP_METHOD(tokenCacheDeleteItem,
                             forTenant:(NSString*)tenantid
 {
   NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:1];
-  
   [dict setObject:(user.uid ?: [NSNull null]) forKey:@"userID"];
   [dict setObject:(user.displayableId ?: [NSNull null]) forKey:@"userName"];
   [dict setObject:(user.userIdentifier ?: [NSNull null]) forKey:@"userIdentifier"];
   [dict setObject:(user.name ?: [NSNull null]) forKey:@"name"];
   [dict setObject:(user.identityProvider ?: [NSNull null]) forKey:@"identityProvider"];
   [dict setObject:(tenantid ?: [NSNull null]) forKey:@"tenantId"];
-  
   return [dict mutableCopy];
-}
-
-+ (MSALPublicClientApplication* )getOrCreateClientApplication:(NSString*)authority
-                                                 withClientId:(NSString*)clientId
-                                                        error:(NSError* __autoreleasing*)error
-{
-  if (!existingApplications)
-  {
-    existingApplications = [NSMutableDictionary dictionaryWithCapacity:1];
-  }
-  
-  MSALPublicClientApplication* clientApplication = [existingApplications objectForKey:authority];
-  
-  if (!clientApplication)
-  {
-    NSError* _error;
-    clientApplication = [[MSALPublicClientApplication alloc] initWithClientId:clientId authority:authority error:&_error];
-    if (_error != nil)
-    {
-      *error = _error;
-    }
-    
-    clientApplication.validateAuthority = false;
-    
-    [existingApplications setObject:clientApplication forKey:authority];
-  }
-  return clientApplication;
 }
 
 @end

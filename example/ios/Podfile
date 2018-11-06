@@ -6,6 +6,6 @@ target 'msalExample' do
   # use_frameworks!
 
   # Pods for msalExample
-  pod 'MSAL', :git => 'https://github.com/AzureAD/microsoft-authentication-library-for-objc.git', :tag => '0.1.3'
+  pod 'MSAL', '~> 0.2'
   
 end

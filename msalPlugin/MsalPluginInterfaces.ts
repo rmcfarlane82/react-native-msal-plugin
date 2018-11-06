@@ -9,12 +9,12 @@ export interface IError {
 }
 
 export interface IAuthenticationResult {
-    accessToken: string;
-    idToken: string;
-    uniqueId: string;
-    authority: string;
-    expiresOn: number;
-    userInfo: IUserInfo;
+  accessToken: string;
+  idToken: string;
+  uniqueId: string;
+  authority: string;
+  expiresOn: number;
+  userInfo: IUserInfo;
 }
 
 export interface IUserInfo {
@@ -24,4 +24,10 @@ export interface IUserInfo {
   name: string;
   identityProvider: string;
   tenantId: string;
+}
+
+export enum MsalUIBehavior {
+  SELECT_ACCOUNT = "SELECT_ACCOUNT",
+  CONSENT = "CONSENT",
+  FORCE_LOGIN = "FORCE_LOGIN",
 }
