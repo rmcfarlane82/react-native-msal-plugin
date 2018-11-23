@@ -3,30 +3,33 @@ package com.reactlibrary;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Pair;
 
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.microsoft.identity.client.AuthenticationCallback;
 import com.microsoft.identity.client.AuthenticationResult;
-import com.microsoft.identity.client.MsalException;
+import com.microsoft.identity.client.UiBehavior;
+import com.microsoft.identity.client.exception.MsalException;
 import com.microsoft.identity.client.PublicClientApplication;
-import com.microsoft.identity.client.User;
+import com.microsoft.identity.client.IAccount;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 public class RNMsalPlugin extends ReactContextBaseJavaModule implements ActivityEventListener {
-    private static PublicClientApplication _publicClientApplication;
 
-    private static Map<String,PublicClientApplication> _publicClientApplications = new HashMap<>();
+    private static PublicClientApplication _publicClientApplication;
 
     public RNMsalPlugin(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -49,10 +52,27 @@ public class RNMsalPlugin extends ReactContextBaseJavaModule implements Activity
     }
 
     @ReactMethod
-    public void acquireTokenAsync(String authority, String clientId, String scopes, String extraParameters, final Promise promise) {
+    public void acquireTokenAsync(String authority, String clientId, ReadableArray scopes, ReadableMap extraParameters, String loginHint, String msalUIBehavior, ReadableArray extraScopesToConsent, final Promise promise) {
+
         try {
 
-            getOrCreatePublicationClient(clientId, authority).acquireToken(this.getCurrentActivity(), scopes.split(","), "", null, extraParameters, handleResult(promise, authority));
+            String[] extraScopesToConsentArray = extraScopesToConsent.toArrayList().toArray(new String[0]);
+
+            String[] scopesArray = scopes.toArrayList().toArray(new String[0]);
+
+            List<Pair<String, String>> pairs = new ArrayList<>();
+
+            HashMap extraParametersHashMap = extraParameters.toHashMap();
+
+            for (Object o : extraParametersHashMap.entrySet()) {
+                Map.Entry entry = (Map.Entry) o;
+                Pair<String, String> pair = new Pair<>(entry.getKey().toString(), entry.getValue().toString());
+                pairs.add(pair);
+            }
+
+            _publicClientApplication = new PublicClientApplication(this.getReactApplicationContext(), clientId, authority);
+
+            _publicClientApplication.acquireToken(this.getCurrentActivity(), scopesArray, loginHint, UiBehavior.valueOf(msalUIBehavior), pairs, extraScopesToConsentArray, authority, handleResult(promise, authority));
 
         } catch (Exception ex) {
             promise.reject(ex);
@@ -60,14 +80,17 @@ public class RNMsalPlugin extends ReactContextBaseJavaModule implements Activity
     }
 
     @ReactMethod
-    public void acquireTokenSilentAsync(String authority, String clientId, String scopes, String userIdentifier, final Promise promise){
+    public void acquireTokenSilentAsync(String authority, String clientId, ReadableArray scopes, String homeAccountIdentifier, Boolean forceRefresh, final Promise promise) {
 
         try {
-            PublicClientApplication publicClientApplication = getOrCreatePublicationClient(clientId, authority);
-            
-            User user = publicClientApplication.getUser(userIdentifier);
 
-            publicClientApplication.acquireTokenSilentAsync(scopes.split(","), user, handleResult(promise, authority));
+            String[] scopesArray = scopes.toArrayList().toArray(new String[0]);
+
+            _publicClientApplication = new PublicClientApplication(this.getReactApplicationContext(), clientId, authority);
+
+            IAccount account = _publicClientApplication.getAccount(homeAccountIdentifier);
+
+            _publicClientApplication.acquireTokenSilentAsync(scopesArray, account, authority, forceRefresh, handleResult(promise, authority));
 
         } catch (Exception ex) {
             promise.reject(ex);
@@ -75,23 +98,31 @@ public class RNMsalPlugin extends ReactContextBaseJavaModule implements Activity
     }
 
     @ReactMethod
-    public void tokenCacheDeleteItem(String authority, String clientId, String userIdentifier, final Promise promise){
+    public void tokenCacheDelete(String clientId, final Promise promise) {
         try {
-            PublicClientApplication publicClientApplication = getOrCreatePublicationClient(clientId, authority);
+            _publicClientApplication = new PublicClientApplication(this.getReactApplicationContext(), clientId);
 
-            User user = publicClientApplication.getUser(userIdentifier);
+            List<IAccount> accounts;
 
-            publicClientApplication.remove(user);
+            accounts = _publicClientApplication.getAccounts();
 
-            promise.resolve(null);
+            if (accounts.size() == 1) {
+                _publicClientApplication.removeAccount(accounts.get(0));
+                promise.resolve(true);
+            } else {
+                for (int i = 0; i < accounts.size(); i++) {
+                    _publicClientApplication.removeAccount(accounts.get(i));
+                }
+                promise.resolve(true);
+            }
 
         } catch (Exception ex) {
             promise.reject(ex);
         }
     }
 
-    private AuthenticationCallback handleResult(final Promise promise, final String authority){
-       return new AuthenticationCallback() {
+    private AuthenticationCallback handleResult(final Promise promise, final String authority) {
+        return new AuthenticationCallback() {
             @Override
             public void onSuccess(AuthenticationResult authenticationResult) {
                 promise.resolve(msalResultToDictionary(authenticationResult, authority));
@@ -109,19 +140,6 @@ public class RNMsalPlugin extends ReactContextBaseJavaModule implements Activity
         };
     }
 
-    private PublicClientApplication getOrCreatePublicationClient(String clientId, String authority) {
-
-        _publicClientApplication = _publicClientApplications.get(authority);
-
-        if(_publicClientApplication == null){
-            _publicClientApplication = new PublicClientApplication(this.getReactApplicationContext(), clientId, authority);
-            _publicClientApplication.setValidateAuthority(false);
-            _publicClientApplications.put(authority,_publicClientApplication);
-        }
-
-        return _publicClientApplication;
-    }
-
     private WritableMap msalResultToDictionary(AuthenticationResult result, String authority) {
 
         WritableMap resultData = new WritableNativeMap();
@@ -129,28 +147,19 @@ public class RNMsalPlugin extends ReactContextBaseJavaModule implements Activity
         resultData.putString("idToken", result.getIdToken());
         resultData.putString("uniqueId", result.getUniqueId());
         resultData.putString("authority", authority);
-
-        if (result.getExpiresOn() != null) {
-            resultData.putString("expiresOn", String.format("%s", result.getExpiresOn().getTime()));
-        }
-
-        resultData.putMap("userInfo", msalUserToDictionary(result.getUser(), result.getTenantId()));
-
+        resultData.putString("expiresOn", String.format("%s", result.getExpiresOn().getTime()));
+        resultData.putMap("userInfo", msalUserToDictionary(result.getAccount(), result.getTenantId()));
         return resultData;
     }
 
-    private WritableMap msalUserToDictionary(User user, String tenantId) {
+    private WritableMap msalUserToDictionary(IAccount account, String tenantId) {
         WritableMap resultData = new WritableNativeMap();
-
-        resultData.putString("userID", user.getDisplayableId());
-        resultData.putString("userName", user.getDisplayableId());
-        resultData.putString("userIdentifier", user.getUserIdentifier());
-        resultData.putString("name", user.getName());
-        resultData.putString("identityProvider", user.getIdentityProvider());
+        resultData.putString("userID", account.getAccountIdentifier().getIdentifier());
+        resultData.putString("userName", account.getUsername());
+        resultData.putString("userIdentifier", account.getHomeAccountIdentifier().getIdentifier());
+        resultData.putString("name", account.getUsername());
+        resultData.putString("identityProvider", account.getEnvironment());
         resultData.putString("tenantId", tenantId);
-
         return resultData;
     }
-
-
 }

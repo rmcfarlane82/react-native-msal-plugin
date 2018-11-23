@@ -8,6 +8,7 @@ import {
 } from "react-native";
 
 import MsalPlugin from "react-native-msal-plugin";
+import MsalUIBehavior from "react-native-msal-plugin";
 import { IAuthenticationResult, IError } from "react-native-msal-plugin";
 
 const authority = "https://login.microsoftonline.com/common";
@@ -57,7 +58,7 @@ export default class CommonLoginExample extends React.Component<any, IState> {
       const result = await this.authClient.acquireTokenSilentAsync(
         scopes,
         this.state.authenticationResult.userInfo.userIdentifier,
-        this.state.authenticationResult.authority,
+        true,
       );
 
       this.setState({
@@ -75,8 +76,19 @@ export default class CommonLoginExample extends React.Component<any, IState> {
   public handleLoginPress = async (): Promise<void> => {
     this.isLoggingIn(true);
 
+    const extraQueryParameters: Record<string, string> = {
+      myKeyOne: "myKeyOneValue",
+      myKeyTwo: "myKeyTwoValue",
+    };
+
     try {
-      const result = await this.authClient.acquireTokenAsync(scopes);
+      const result = await this.authClient.acquireTokenAsync(
+        scopes,
+        extraQueryParameters,
+        "",
+        MsalUIBehavior.SELECT_ACCOUNT,
+      );
+
       this.authComplete(result);
     } catch (error) {
       this.isLoggingIn(false);
@@ -95,9 +107,7 @@ export default class CommonLoginExample extends React.Component<any, IState> {
 
   public handleLogoutPress = () => {
     this.authClient
-      .tokenCacheDeleteItem(
-        this.state.authenticationResult.userInfo.userIdentifier,
-      )
+      .tokenCacheDelete()
       .then(() => {
         this.setState({
           isLoggedin: false,

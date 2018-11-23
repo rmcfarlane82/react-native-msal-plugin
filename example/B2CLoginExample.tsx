@@ -8,13 +8,15 @@ import {
 } from "react-native";
 
 import MsalPlugin from "react-native-msal-plugin";
+import MsalUIBehavior from "react-native-msal-plugin";
 import {
   IAuthenticationResult,
   IError,
   IPolicies,
- } from "react-native-msal-plugin";
+} from "react-native-msal-plugin";
 
-const authority = "https://reactnativemsalplugin.b2clogin.com/tfp/reactnativemsalplugin.onmicrosoft.com";
+const authority =
+  "https://reactnativemsalplugin.b2clogin.com/tfp/reactnativemsalplugin.onmicrosoft.com";
 const applicationId = "134220b3-329f-406e-8020-c31f94c5ee32";
 const policies = {
   signUpSignInPolicy: "B2C_1_signup-signin-policy",
@@ -33,12 +35,12 @@ interface IState {
 }
 
 export default class B2CLoginExample extends React.Component<any, IState> {
-  private authClient: MsalPlugin;
+  private msalPlugin: MsalPlugin;
 
   constructor(props: any) {
     super(props);
 
-    this.authClient = new MsalPlugin(authority, applicationId);
+    this.msalPlugin = new MsalPlugin(authority, applicationId, policies);
 
     this.state = {
       isLoggingIn: false,
@@ -116,10 +118,10 @@ export default class B2CLoginExample extends React.Component<any, IState> {
     this.refreshingToken(true);
 
     try {
-      const result = await this.authClient.acquireTokenSilentAsync(
+      const result = await this.msalPlugin.acquireTokenSilentAsync(
         scopes,
         this.state.authenticationResult.userInfo.userIdentifier,
-        this.state.authenticationResult.authority,
+        true,
       );
 
       this.setState({
@@ -135,8 +137,18 @@ export default class B2CLoginExample extends React.Component<any, IState> {
   private handleLoginPress = async (): Promise<void> => {
     this.isLoggingIn(true);
 
+    const extraQueryParameters: Record<string, string> = {
+      myKeyOne: "myKeyOneValue",
+      myKeyTwo: "myKeyTwoValue",
+    };
+
     try {
-      const result = await this.authClient.aquireTokenB2CAsync(scopes, policies);
+      const result = await this.msalPlugin.acquireTokenAsync(
+        scopes,
+        extraQueryParameters,
+        "",
+        MsalUIBehavior.SELECT_ACCOUNT,
+      );
       this.setState({
         isLoggingIn: false,
         isLoggedin: true,
@@ -148,18 +160,18 @@ export default class B2CLoginExample extends React.Component<any, IState> {
   }
 
   private handleLogoutPress = () => {
-    this.authClient.tokenCacheB2CDeleteItem(
-      this.state.authenticationResult.authority,
-      this.state.authenticationResult.userInfo.userIdentifier,
-    ).then(() => {
+    this.msalPlugin
+      .tokenCacheDelete()
+      .then(() => {
         this.setState({
-        isLoggedin: false,
-        authenticationResult: {} as IAuthenticationResult,
+          isLoggedin: false,
+          authenticationResult: {} as IAuthenticationResult,
+        });
+      })
+      .catch((error: IError) => {
+        // tslint:disable-next-line:no-console
+        console.log(error.message);
       });
-    }).catch((error: IError) => {
-      // tslint:disable-next-line:no-console
-      console.log(error.message);
-    });
   }
 }
 
