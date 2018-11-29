@@ -26,7 +26,7 @@ export interface IUserInfo {
   tenantId: string;
 }
 
-export enum MsalUIBehavior {
+export declare enum MsalUIBehavior {
   SELECT_ACCOUNT = "SELECT_ACCOUNT",
   CONSENT = "CONSENT",
   FORCE_LOGIN = "FORCE_LOGIN",

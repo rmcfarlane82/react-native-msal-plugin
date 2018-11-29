@@ -8,11 +8,11 @@ import {
 } from "react-native";
 
 import MsalPlugin from "react-native-msal-plugin";
-import MsalUIBehavior from "react-native-msal-plugin";
 import {
   IAuthenticationResult,
   IError,
   IPolicies,
+  MsalUIBehavior,
 } from "react-native-msal-plugin";
 
 const authority =

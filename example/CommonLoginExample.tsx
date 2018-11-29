@@ -8,8 +8,7 @@ import {
 } from "react-native";
 
 import MsalPlugin from "react-native-msal-plugin";
-import MsalUIBehavior from "react-native-msal-plugin";
-import { IAuthenticationResult, IError } from "react-native-msal-plugin";
+import { IAuthenticationResult, IError, MsalUIBehavior } from "react-native-msal-plugin";
 
 const authority = "https://login.microsoftonline.com/common";
 const clientId = "ad04905f-6060-4bb0-9372-958afdb68574";
