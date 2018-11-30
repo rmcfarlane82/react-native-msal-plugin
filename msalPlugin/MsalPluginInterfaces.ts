@@ -25,9 +25,3 @@ export interface IUserInfo {
   identityProvider: string;
   tenantId: string;
 }
-
-export declare enum MsalUIBehavior {
-  SELECT_ACCOUNT = "SELECT_ACCOUNT",
-  CONSENT = "CONSENT",
-  FORCE_LOGIN = "FORCE_LOGIN",
-}

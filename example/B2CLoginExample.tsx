@@ -7,8 +7,7 @@ import {
   View,
 } from "react-native";
 
-import MsalPlugin from "react-native-msal-plugin";
-import {
+import MsalPlugin, {
   IAuthenticationResult,
   IError,
   IPolicies,
@@ -155,6 +154,7 @@ export default class B2CLoginExample extends React.Component<any, IState> {
         authenticationResult: result,
       });
     } catch (error) {
+      console.log(error);
       this.isLoggingIn(false);
     }
   }

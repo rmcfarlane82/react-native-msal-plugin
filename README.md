@@ -100,6 +100,11 @@ Then add this method
 @end
 ```
 
+The msal library uses ASWebAuthenticationsession for authentication on ios12 so you will have to add a new keychain group.
+to find out more read the docs [https://github.com/AzureAD/microsoft-authentication-library-for-objc](https://github.com/AzureAD/microsoft-authentication-library-for-objc)
+
+![alt text](docs/keychain-steps.png)
+
 ## Android Setup
 
 Add Browser tab activity to your AndroidManifest.xml make sure to replace [REPLACE_WITH_YOUR_APPLICATION_ID] with your own application id
