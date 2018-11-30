@@ -42,7 +42,7 @@ Create a Podfile in the ios project and add the following
 
 ```ruby
 
-platform :ios, '9.3'
+platform :ios, '10'
 
 target 'msalExample' do
 
