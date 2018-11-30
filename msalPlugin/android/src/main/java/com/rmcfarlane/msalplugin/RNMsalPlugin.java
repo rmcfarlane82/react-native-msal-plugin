@@ -1,5 +1,5 @@
 
-package com.reactlibrary;
+package com.rmcfarlane.msalplugin;
 
 import android.app.Activity;
 import android.content.Intent;
