@@ -154,11 +154,10 @@ public class RNMsalPlugin extends ReactContextBaseJavaModule implements Activity
 
     private WritableMap msalUserToDictionary(IAccount account, String tenantId) {
         WritableMap resultData = new WritableNativeMap();
-        resultData.putString("userID", account.getAccountIdentifier().getIdentifier());
         resultData.putString("userName", account.getUsername());
         resultData.putString("userIdentifier", account.getHomeAccountIdentifier().getIdentifier());
         resultData.putString("name", account.getUsername());
-        resultData.putString("identityProvider", account.getEnvironment());
+        resultData.putString("environment", account.getEnvironment());
         resultData.putString("tenantId", tenantId);
         return resultData;
     }
