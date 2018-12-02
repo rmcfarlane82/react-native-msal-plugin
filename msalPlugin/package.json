@@ -4,7 +4,8 @@
   "description": "React Native Plugin that wraps Microsoft MSAL library allowing you to authenticate with azure B2C",
   "main": "./src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "build": "yarn tsc"
   },
   "keywords": [
     "react-native",
@@ -28,8 +29,30 @@
   },
   "homepage": "https://github.com/rmcfarlane82/react-native-msal-plugin#readme",
   "devDependencies": {
+    "@types/jest": "^23.3.10",
     "@types/react-native": "0.57.13",
+    "babel-jest": "23.6.0",
+    "jest": "23.6.0",
+    "metro-react-native-babel-preset": "^0.50.0",
+    "react": "^16.6.3",
     "react-native": "0.57.5",
+    "react-test-renderer": "16.5.0",
+    "ts-jest": "^23.10.5",
     "typescript": "3.1.3"
+  },
+  "jest": {
+    "preset": "react-native",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js",
+      "\\.(ts|tsx)$": "ts-jest"
+    },
+    "testMatch": [
+      "**/__tests__/*.+(ts|tsx|js)"
+    ]
   }
 }

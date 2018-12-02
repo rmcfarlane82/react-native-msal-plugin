@@ -103,6 +103,7 @@ export default class MsalPlugin {
           extraQueryParameters,
           loginHint,
           msalUIBehavior,
+          extraScopesToConsent,
         );
       } catch (error) {
         throw error;
