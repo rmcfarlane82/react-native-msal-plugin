@@ -32,7 +32,6 @@ RCT_REMAP_METHOD(acquireTokenAsync,
     }
     
     MSALPublicClientApplication* clientApplication = [[MSALPublicClientApplication alloc] initWithClientId:clientId
-    keychainGroup:keychainGroup
                                                                                                  authority:msalAuthority
                                                                                                      error:&error];
     if (error) {
