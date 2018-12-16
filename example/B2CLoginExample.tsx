@@ -7,12 +7,11 @@ import {
   View,
 } from "react-native";
 
-import MsalPlugin from "react-native-msal-plugin";
-import MsalUIBehavior from "react-native-msal-plugin";
-import {
+import MsalPlugin, {
   IAuthenticationResult,
   IError,
   IPolicies,
+  MsalUIBehavior,
 } from "react-native-msal-plugin";
 
 const authority =
@@ -155,6 +154,7 @@ export default class B2CLoginExample extends React.Component<any, IState> {
         authenticationResult: result,
       });
     } catch (error) {
+      console.log(error);
       this.isLoggingIn(false);
     }
   }

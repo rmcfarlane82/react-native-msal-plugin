@@ -42,7 +42,7 @@ Create a Podfile in the ios project and add the following
 
 ```ruby
 
-platform :ios, '9.3'
+platform :ios, '10'
 
 target 'msalExample' do
 
@@ -99,6 +99,11 @@ Then add this method
 
 @end
 ```
+
+The msal library uses ASWebAuthenticationsession for authentication on ios12 so you will have to add a new keychain group.
+to find out more read the docs [https://github.com/AzureAD/microsoft-authentication-library-for-objc](https://github.com/AzureAD/microsoft-authentication-library-for-objc)
+
+![alt text](docs/keychain-steps.png)
 
 ## Android Setup
 

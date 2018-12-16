@@ -3,8 +3,8 @@ import {
   IAuthenticationResult,
   IError,
   IPolicies,
-  MsalUIBehavior,
 } from "./MsalPluginInterfaces";
+import { MsalUIBehavior } from "./MsalUIBehavior";
 
 const { RNMsalPlugin } = NativeModules;
 const RESET_PASSWORD_CODE = "AADB2C90118";
@@ -103,6 +103,7 @@ export default class MsalPlugin {
           extraQueryParameters,
           loginHint,
           msalUIBehavior,
+          extraScopesToConsent,
         );
       } catch (error) {
         throw error;

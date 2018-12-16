@@ -17,6 +17,7 @@
 		0F6C4DCC21590AF300FEC3D9 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 0F6C4DCA21590AF300FEC3D9 /* Podfile */; };
 		0F6C4DCD21590AF300FEC3D9 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 0F6C4DCA21590AF300FEC3D9 /* Podfile */; };
 		0F6C4DCE21590AF300FEC3D9 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 0F6C4DCA21590AF300FEC3D9 /* Podfile */; };
+		0F75EAAE21B1764300FDFD4E /* libRNMsalPlugin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F75EAAD21B1742800FDFD4E /* libRNMsalPlugin.a */; };
 		11D1A2F320CAFA9E000508D9 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
 		139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139105C11AF99BAD00B5F7CC /* libRCTSettings.a */; };
@@ -41,7 +42,6 @@
 		2DCD954D1E0B4F2C00145EB5 /* msalExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* msalExampleTests.m */; };
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
-		AB7091BC21A754EA005D4D5F /* libRNMsalPlugin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F22CBAD2164E77700BF2652 /* libRNMsalPlugin.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		C281654C7D5CD42EE73B9689 /* libPods-msalExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DFDF8BCD05AEA7A7DA3AA52B /* libPods-msalExample.a */; };
 /* End PBXBuildFile section */
@@ -89,9 +89,9 @@
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
 			remoteInfo = msalExample;
 		};
-		0F22CBAC2164E77700BF2652 /* PBXContainerItemProxy */ = {
+		0F75EAAC21B1742800FDFD4E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 153E8F23AC72408880FB6D7F /* RNMsalPlugin.xcodeproj */;
+			containerPortal = 0B334CAEEF0749968559CC91 /* RNMsalPlugin.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RNMsalPlugin;
@@ -330,7 +330,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTActionSheet.xcodeproj; path = "../node_modules/react-native/Libraries/ActionSheetIOS/RCTActionSheet.xcodeproj"; sourceTree = "<group>"; };
 		00C302B51ABCB90400DB3ED1 /* RCTGeolocation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTGeolocation.xcodeproj; path = "../node_modules/react-native/Libraries/Geolocation/RCTGeolocation.xcodeproj"; sourceTree = "<group>"; };
 		00C302BB1ABCB91800DB3ED1 /* RCTImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTImage.xcodeproj; path = "../node_modules/react-native/Libraries/Image/RCTImage.xcodeproj"; sourceTree = "<group>"; };
@@ -339,7 +338,9 @@
 		00E356EE1AD99517003FC87E /* msalExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = msalExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* msalExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = msalExampleTests.m; sourceTree = "<group>"; };
+		0B334CAEEF0749968559CC91 /* RNMsalPlugin.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNMsalPlugin.xcodeproj; path = "../node_modules/react-native-msal-plugin/ios/RNMsalPlugin.xcodeproj"; sourceTree = "<group>"; };
 		0F6C4DCA21590AF300FEC3D9 /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		0F75EAAF21B177FC00FDFD4E /* msalExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = msalExample.entitlements; path = msalExample/msalExample.entitlements; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* msalExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = msalExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -350,7 +351,6 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = msalExample/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = msalExample/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
-		153E8F23AC72408880FB6D7F /* RNMsalPlugin.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNMsalPlugin.xcodeproj; path = "../node_modules/react-native-msal-plugin/ios/RNMsalPlugin.xcodeproj"; sourceTree = "<group>"; };
 		2C3801DC921A2545CFA9CCE8 /* Pods-msalExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-msalExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-msalExample/Pods-msalExample.debug.xcconfig"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* msalExample-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "msalExample-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* msalExample-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "msalExample-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -358,8 +358,8 @@
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
+		94C9D670F6A44D8FAB3DC088 /* libRNMsalPlugin.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNMsalPlugin.a; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
-		CCA92C8CAEBE45F7BED8ED57 /* libRNMsalPlugin.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNMsalPlugin.a; sourceTree = "<group>"; };
 		DFDF8BCD05AEA7A7DA3AA52B /* libPods-msalExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-msalExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F776D41AC4ACBBC1F5DFD908 /* Pods-msalExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-msalExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-msalExample/Pods-msalExample.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -377,7 +377,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AB7091BC21A754EA005D4D5F /* libRNMsalPlugin.a in Frameworks */,
+				0F75EAAE21B1764300FDFD4E /* libRNMsalPlugin.a in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				11D1A2F320CAFA9E000508D9 /* libRCTAnimation.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
@@ -479,20 +479,20 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		0F22CBA92164E77700BF2652 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				0F22CBAD2164E77700BF2652 /* libRNMsalPlugin.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		0F6C4D9F2159098C00FEC3D9 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
-				CCA92C8CAEBE45F7BED8ED57 /* libRNMsalPlugin.a */,
+				94C9D670F6A44D8FAB3DC088 /* libRNMsalPlugin.a */,
 			);
 			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+		0F75EA8421B1742800FDFD4E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0F75EAAD21B1742800FDFD4E /* libRNMsalPlugin.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		139105B71AF99BAD00B5F7CC /* Products */ = {
@@ -518,7 +518,7 @@
 		13B07FAE1A68108700A75B9A /* msalExample */ = {
 			isa = PBXGroup;
 			children = (
-				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
+				0F75EAAF21B177FC00FDFD4E /* msalExample.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -603,7 +603,7 @@
 				832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */,
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
-				153E8F23AC72408880FB6D7F /* RNMsalPlugin.xcodeproj */,
+				0B334CAEEF0749968559CC91 /* RNMsalPlugin.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -745,7 +745,12 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = AUCETZ7HL5;
+						DevelopmentTeam = KUQ25HN96U;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -819,8 +824,8 @@
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
 				},
 				{
-					ProductGroup = 0F22CBA92164E77700BF2652 /* Products */;
-					ProjectRef = 153E8F23AC72408880FB6D7F /* RNMsalPlugin.xcodeproj */;
+					ProductGroup = 0F75EA8421B1742800FDFD4E /* Products */;
+					ProjectRef = 0B334CAEEF0749968559CC91 /* RNMsalPlugin.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -869,11 +874,11 @@
 			remoteRef = 00C302E31ABCB9EE00DB3ED1 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		0F22CBAD2164E77700BF2652 /* libRNMsalPlugin.a */ = {
+		0F75EAAD21B1742800FDFD4E /* libRNMsalPlugin.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libRNMsalPlugin.a;
-			remoteRef = 0F22CBAC2164E77700BF2652 /* PBXContainerItemProxy */;
+			remoteRef = 0F75EAAC21B1742800FDFD4E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		139105C11AF99BAD00B5F7CC /* libRCTSettings.a */ = {
@@ -1264,6 +1269,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-msal-plugin/ios",
+					"$(SRCROOT)/../node_modules/react-native-msal-plugin/ios",
 				);
 				INFOPLIST_FILE = msalExampleTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1291,6 +1297,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-msal-plugin/ios",
+					"$(SRCROOT)/../node_modules/react-native-msal-plugin/ios",
 				);
 				INFOPLIST_FILE = msalExampleTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1314,14 +1321,17 @@
 			baseConfigurationReference = 2C3801DC921A2545CFA9CCE8 /* Pods-msalExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = msalExample/msalExample.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = AUCETZ7HL5;
+				DEVELOPMENT_TEAM = KUQ25HN96U;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-msal-plugin/ios",
+					"$(SRCROOT)/../node_modules/react-native-msal-plugin/ios",
 				);
 				INFOPLIST_FILE = msalExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1339,13 +1349,16 @@
 			baseConfigurationReference = F776D41AC4ACBBC1F5DFD908 /* Pods-msalExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = msalExample/msalExample.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = AUCETZ7HL5;
+				DEVELOPMENT_TEAM = KUQ25HN96U;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-msal-plugin/ios",
+					"$(SRCROOT)/../node_modules/react-native-msal-plugin/ios",
 				);
 				INFOPLIST_FILE = msalExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1372,6 +1385,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-msal-plugin/ios",
 					"$(SRCROOT)/../node_modules/react-native-msal-plugin/ios",
 				);
 				INFOPLIST_FILE = "msalExample-tvOS/Info.plist";
@@ -1407,6 +1421,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-msal-plugin/ios",
+					"$(SRCROOT)/../node_modules/react-native-msal-plugin/ios",
 				);
 				INFOPLIST_FILE = "msalExample-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1440,6 +1455,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-msal-plugin/ios",
+					"$(SRCROOT)/../node_modules/react-native-msal-plugin/ios",
 				);
 				INFOPLIST_FILE = "msalExample-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1472,6 +1488,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-msal-plugin/ios",
 					"$(SRCROOT)/../node_modules/react-native-msal-plugin/ios",
 				);
 				INFOPLIST_FILE = "msalExample-tvOSTests/Info.plist";

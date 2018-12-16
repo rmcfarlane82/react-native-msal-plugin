@@ -22,8 +22,17 @@ RCT_REMAP_METHOD(acquireTokenAsync,
   @try {
     NSError* error = nil;
     
+    NSURL* authorityUrl = [NSURL URLWithString:authority];
+    
+    MSALAuthority* msalAuthority = [MSALAuthority authorityWithURL:authorityUrl
+                                                             error:&error];
+    
+    if(error){
+      @throw(error);
+    }
+    
     MSALPublicClientApplication* clientApplication = [[MSALPublicClientApplication alloc] initWithClientId:clientId
-                                                                                                 authority:authority
+                                                                                                 authority:msalAuthority
                                                                                                      error:&error];
     if (error) {
       @throw(error);
@@ -44,7 +53,7 @@ RCT_REMAP_METHOD(acquireTokenAsync,
                                    loginHint:loginHint
                                   uiBehavior:behavior
                         extraQueryParameters:extraQueryParams
-                                   authority:authority
+                                   authority:msalAuthority
                                correlationId:[NSUUID new]
                              completionBlock:^(MSALResult *result, NSError *error) {
                                if(error) {
@@ -72,8 +81,17 @@ RCT_REMAP_METHOD(acquireTokenSilentAsync,
   @try {
     NSError* error = nil;
     
+    NSURL* authorityUrl = [NSURL URLWithString:authority];
+    
+    MSALAuthority* msalAuthority = [MSALAuthority authorityWithURL:authorityUrl
+                                                             error:&error];
+    
+    if(error){
+      @throw(error);
+    }
+    
     MSALPublicClientApplication* clientApplication = [[MSALPublicClientApplication alloc] initWithClientId:clientId
-                                                                                                 authority:authority
+                                                                                                 authority:msalAuthority
                                                                                                      error:&error];
     if (error) {
       @throw(error);
@@ -83,7 +101,7 @@ RCT_REMAP_METHOD(acquireTokenSilentAsync,
           clientApplication.validateAuthority = false;
     }
 
-    MSALUser* user = [clientApplication userForIdentifier:homeAccountIdentifier
+    MSALAccount* account = [clientApplication accountForHomeAccountId:homeAccountIdentifier
                     error:&error];
     
     if (error) {
@@ -91,8 +109,8 @@ RCT_REMAP_METHOD(acquireTokenSilentAsync,
     }
     
     [clientApplication acquireTokenSilentForScopes:scopes
-                                              user:user
-                                         authority:authority
+                                              account:account
+                                         authority:msalAuthority
                                       forceRefresh:forceRefresh
                                      correlationId:nil
                                    completionBlock:^(MSALResult *result, NSError *error) {
@@ -124,14 +142,14 @@ RCT_REMAP_METHOD(tokenCacheDelete,
       @throw error;
     }
     
-    NSArray<MSALUser*>* users = [clientApplication users:&error];
+    NSArray<MSALAccount*>* accounts = [clientApplication allAccounts:&error];
     
     if (error) {
       @throw error;
     }
     
-    for (MSALUser *user in users) {
-      [clientApplication removeUser:user error:&error];
+    for (MSALAccount *account in accounts) {
+      [clientApplication removeAccount:account error:&error];
     }
     
     if (error) {
@@ -156,19 +174,17 @@ RCT_REMAP_METHOD(tokenCacheDelete,
   [dict setObject:(result.uniqueId) ?: [NSNull null] forKey:@"uniqueId"];
   [dict setObject:(authority) ?: [NSNull null] forKey:@"authority"];
   [dict setObject:[NSNumber numberWithDouble:[result.expiresOn timeIntervalSince1970] * 1000] forKey:@"expiresOn"];
-  [dict setObject:[self MSALUserToDictionary:result.user forTenant:result.tenantId] forKey:@"userInfo"];
+  [dict setObject:[self MSALUserToDictionary:result.account forTenant:result.tenantId] forKey:@"userInfo"];
   return [dict mutableCopy];
 }
 
-- (NSDictionary*)MSALUserToDictionary:(MSALUser*)user
+- (NSDictionary*)MSALUserToDictionary:(MSALAccount*)account
                             forTenant:(NSString*)tenantid
 {
   NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:1];
-  [dict setObject:(user.uid ?: [NSNull null]) forKey:@"userID"];
-  [dict setObject:(user.displayableId ?: [NSNull null]) forKey:@"userName"];
-  [dict setObject:(user.userIdentifier ?: [NSNull null]) forKey:@"userIdentifier"];
-  [dict setObject:(user.name ?: [NSNull null]) forKey:@"name"];
-  [dict setObject:(user.identityProvider ?: [NSNull null]) forKey:@"identityProvider"];
+  [dict setObject:(account.username ?: [NSNull null]) forKey:@"userName"];
+  [dict setObject:(account.homeAccountId.identifier ?: [NSNull null]) forKey:@"userIdentifier"];
+  [dict setObject:(account.environment ?: [NSNull null]) forKey:@"environment"];
   [dict setObject:(tenantid ?: [NSNull null]) forKey:@"tenantId"];
   return [dict mutableCopy];
 }

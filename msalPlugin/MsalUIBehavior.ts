@@ -1,0 +1,5 @@
+export enum MsalUIBehavior {
+  SELECT_ACCOUNT = "SELECT_ACCOUNT",
+  CONSENT = "CONSENT",
+  FORCE_LOGIN = "FORCE_LOGIN",
+}
