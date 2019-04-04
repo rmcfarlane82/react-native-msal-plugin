@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.util.Pair;
 
+import com.facebook.react.bridge.BaseActivityEventListener;
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -27,13 +28,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class RNMsalPlugin extends ReactContextBaseJavaModule implements ActivityEventListener {
+public class RNMsalPlugin extends ReactContextBaseJavaModule {
 
     private static PublicClientApplication _publicClientApplication;
 
     public RNMsalPlugin(ReactApplicationContext reactContext) {
         super(reactContext);
-        reactContext.addActivityEventListener(this);
     }
 
     @Override
@@ -41,14 +41,20 @@ public class RNMsalPlugin extends ReactContextBaseJavaModule implements Activity
         return "RNMsalPlugin";
     }
 
-    @Override
-    public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
-        _publicClientApplication.handleInteractiveRequestRedirect(requestCode, resultCode, data);
+    private final ActivityEventListener activityEventListener = new BaseActivityEventListener() {
+        @Override
+        public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(activity, requestCode, resultCode, data);
+            _publicClientApplication.handleInteractiveRequestRedirect(requestCode, resultCode, data);
+        }
+    };
+
+    private void removeActivityEventListener(){
+        this.getReactApplicationContext().removeActivityEventListener(activityEventListener);
     }
 
-    @Override
-    public void onNewIntent(Intent intent) {
-
+    private void addActivityEventListener(){
+        this.getReactApplicationContext().addActivityEventListener(activityEventListener);
     }
 
     @ReactMethod
@@ -72,9 +78,12 @@ public class RNMsalPlugin extends ReactContextBaseJavaModule implements Activity
 
             _publicClientApplication = new PublicClientApplication(this.getReactApplicationContext(), clientId, authority);
 
+            addActivityEventListener();
+
             _publicClientApplication.acquireToken(this.getCurrentActivity(), scopesArray, loginHint, UiBehavior.valueOf(msalUIBehavior), pairs, extraScopesToConsentArray, authority, handleResult(promise, authority));
 
         } catch (Exception ex) {
+            removeActivityEventListener();
             promise.reject(ex);
         }
     }
@@ -90,9 +99,12 @@ public class RNMsalPlugin extends ReactContextBaseJavaModule implements Activity
 
             IAccount account = _publicClientApplication.getAccount(homeAccountIdentifier);
 
+            addActivityEventListener();
+
             _publicClientApplication.acquireTokenSilentAsync(scopesArray, account, authority, forceRefresh, handleResult(promise, authority));
 
         } catch (Exception ex) {
+            removeActivityEventListener();
             promise.reject(ex);
         }
     }
@@ -125,16 +137,19 @@ public class RNMsalPlugin extends ReactContextBaseJavaModule implements Activity
         return new AuthenticationCallback() {
             @Override
             public void onSuccess(AuthenticationResult authenticationResult) {
+                removeActivityEventListener();
                 promise.resolve(msalResultToDictionary(authenticationResult, authority));
             }
 
             @Override
             public void onError(MsalException exception) {
+                removeActivityEventListener();
                 promise.reject(exception);
             }
 
             @Override
             public void onCancel() {
+                removeActivityEventListener();
                 promise.reject("userCancel", "userCancel");
             }
         };
