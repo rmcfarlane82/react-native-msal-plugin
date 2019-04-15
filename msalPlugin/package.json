@@ -1,6 +1,6 @@
 {
   "name": "react-native-msal-plugin",
-  "version": "3.0.0-beta.2",
+  "version": "3.0.0-beta.3",
   "description": "React Native Plugin that wraps Microsoft MSAL library allowing you to authenticate with azure B2C",
   "main": "./src/index.js",
   "scripts": {
