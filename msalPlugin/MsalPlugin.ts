@@ -32,7 +32,7 @@ export default class MsalPlugin {
     loginHint: string = "",
     msalUIBehavior: MsalUIBehavior = MsalUIBehavior.SELECT_ACCOUNT,
     extraScopesToConsent: string[] = [],
-  ): IAuthenticationResult => {
+  ): Promise<IAuthenticationResult> => {
     return RNMsalPlugin.acquireTokenAsync(
       this.getAuthority(this.policies.signUpSignInPolicy),
       this.clientId,
