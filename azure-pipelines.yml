@@ -22,6 +22,7 @@ steps:
       filePattern: package.json
       tokenizeType: Json
       includes: version
+      excludes:
 
   - task: colinsalmcorner.colinsalmcorner-buildtasks.replace-tokens-task.ReplaceTokens@1
     displayName: 'Replace tokens in package'
