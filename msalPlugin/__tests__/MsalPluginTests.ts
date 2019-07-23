@@ -149,7 +149,7 @@ describe("acquireTokenAsync tests", () => {
 
             mockAcquireTokenAsync
                 .mockRejectedValueOnce(error)
-                .mockResolvedValue({});
+                .mockResolvedValue({} as Promise<any>);
 
             const sut = new MsalPlugin(authority, clientId, policies);
 
@@ -181,8 +181,8 @@ describe("acquireTokenAsync tests", () => {
 
             mockAcquireTokenAsync
                 .mockRejectedValueOnce(error)
-                .mockResolvedValue({})
-                .mockResolvedValue({});
+                .mockResolvedValue({} as Promise<any>)
+                .mockResolvedValue({} as Promise<any>);
 
             const sut = new MsalPlugin(authority, clientId, policies);
 

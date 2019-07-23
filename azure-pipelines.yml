@@ -4,52 +4,52 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
 pool:
-  vmImage: 'Ubuntu 16.04'
+  vmImage: "ubuntu-latest"
 
 steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '10.x'
-  displayName: 'Install Node.js'
+  - task: NodeTool@0
+    inputs:
+      versionSpec: "10.x"
+    displayName: "Install Node.js"
 
-- script: |
-    npm install -g yarn
-    npm install -g jest-cli
-    npm install -g react-native-cli
-  displayName: 'install global packages'
-  
-- script: |
-    yarn
-    yarn build
-    yarn test
-  workingDirectory: 'msalPlugin'
-  displayName: 'build and test msalPlugin'
-  
-- task: CopyFiles@2
-  displayName: 'copy msalPlugin files to staging directory'
-  inputs:
-    SourceFolder: msalPlugin
-    Contents: |
-      **
-      !*.ts
-      !__tests__/**
-      !node_modules/**
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+  - script: |
+      npm install -g yarn
+      npm install -g jest-cli
+      npm install -g react-native-cli
+    displayName: "install global packages"
 
-- task: CopyFiles@2
-  displayName: 'copy readme to staging directory'
-  inputs:
-    Contents: README.md
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+  - script: |
+      yarn
+      yarn build
+      yarn test
+    workingDirectory: "msalPlugin"
+    displayName: "build and test msalPlugin"
 
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish artifacts'
-  inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
-    artifactName: 'msalPlugin' 
+  - task: CopyFiles@2
+    displayName: "copy msalPlugin files to staging directory"
+    inputs:
+      SourceFolder: msalPlugin
+      Contents: |
+        **
+        !*.ts
+        !__tests__/**
+        !node_modules/**
+      TargetFolder: "$(Build.ArtifactStagingDirectory)"
 
-- script: |
-    cd example
-    yarn
-  workingDirectory: 'example'
-  displayName: 'build example'
+  - task: CopyFiles@2
+    displayName: "copy readme to staging directory"
+    inputs:
+      Contents: README.md
+      TargetFolder: "$(Build.ArtifactStagingDirectory)"
+
+  - task: PublishBuildArtifacts@1
+    displayName: "Publish artifacts"
+    inputs:
+      pathtoPublish: "$(Build.ArtifactStagingDirectory)"
+      artifactName: "msalPlugin"
+
+  - script: |
+      cd example
+      yarn
+    workingDirectory: "example"
+    displayName: "build example"
