@@ -15,6 +15,20 @@ steps:
       versionSpec: "10.x"
     displayName: "Install Node.js"
 
+  - task: colinsalmcorner.colinsalmcorner-buildtasks.tokenizer-task.JSONTokenizer@1
+    displayName: 'Tokenize file(s)'
+    inputs:
+      sourcePath: 'msalPlugin'
+      filePattern: package.json
+      tokenizeType: Json
+      includes: version
+
+  - task: colinsalmcorner.colinsalmcorner-buildtasks.replace-tokens-task.ReplaceTokens@1
+    displayName: 'Replace tokens in package'
+    inputs:
+      sourcePath: 'msalPlugin'
+      filePattern: package.json
+
   - script: |
       npm install -g yarn
       npm install -g jest-cli
@@ -50,20 +64,6 @@ steps:
     inputs:
       pathtoPublish: "$(Build.ArtifactStagingDirectory)"
       artifactName: "msalPlugin"
-      
-  - task: colinsalmcorner.colinsalmcorner-buildtasks.tokenizer-task.JSONTokenizer@1
-    displayName: 'Tokenize file(s)'
-    inputs:
-      sourcePath: '$(Build.ArtifactStagingDirectory)/msalPlugin'
-      filePattern: package.json
-      tokenizeType: Json
-      includes: version
-
-  - task: colinsalmcorner.colinsalmcorner-buildtasks.replace-tokens-task.ReplaceTokens@1
-    displayName: 'Replace tokens in package'
-    inputs:
-      sourcePath: '$(Build.ArtifactStagingDirectory)/msalPlugin'
-      filePattern: package.json
 
   - script: |
       cd example
