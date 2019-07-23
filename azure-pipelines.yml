@@ -45,6 +45,12 @@ steps:
       Contents: README.md
       TargetFolder: "$(Build.ArtifactStagingDirectory)"
       
+  - task: PublishBuildArtifacts@1
+    displayName: "Publish artifacts"
+    inputs:
+      pathtoPublish: "$(Build.ArtifactStagingDirectory)"
+      artifactName: "msalPlugin"
+      
   - task: colinsalmcorner.colinsalmcorner-buildtasks.tokenizer-task.JSONTokenizer@1
     displayName: 'Tokenize file(s)'
     inputs:
@@ -58,12 +64,6 @@ steps:
     inputs:
       sourcePath: '$(Build.ArtifactStagingDirectory)/msalPlugin'
       filePattern: package.json
-
-  - task: PublishBuildArtifacts@1
-    displayName: "Publish artifacts"
-    inputs:
-      pathtoPublish: "$(Build.ArtifactStagingDirectory)"
-      artifactName: "msalPlugin"
 
   - script: |
       cd example
