@@ -1,5 +1,7 @@
 # react-native-msal-plugin
 
+### **Very sorry but I no longer have enough time to keep this package updated, I highly recommend using [Appcenter Auth](https://docs.microsoft.com/en-us/appcenter/auth/), this was really a stop gap for me as there was nothing around at the time, thanks for the support.**
+
 [ChangeLog](docs/changelog.md)
 
 Wrapper around [microsoft-authentication-library-for-objc](https://github.com/AzureAD/microsoft-authentication-library-for-objc) library and [microsoft-authentication-library-for-android](https://github.com/AzureAD/microsoft-authentication-library-for-android)
